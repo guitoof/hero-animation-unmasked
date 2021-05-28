@@ -15,11 +15,8 @@ class HeroDetailsPage extends StatelessWidget {
         alignment: Alignment.topCenter,
         child: Column(
           children: [
-            Hero(
-              tag: hero.id,
-              child: Image.network(
-                hero.avatar,
-              ),
+            Image.network(
+              hero.avatar,
             ),
             Text(
               hero.name,

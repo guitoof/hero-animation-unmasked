@@ -20,11 +20,8 @@ class HeroTile extends StatelessWidget {
         children: <Widget>[
           Expanded(
             flex: 2,
-            child: Hero(
-              tag: hero.id,
-              child: Image.network(
-                hero.avatar,
-              ),
+            child: Image.network(
+              hero.avatar,
             ),
           ),
           Expanded(
