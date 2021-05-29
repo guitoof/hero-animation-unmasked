@@ -33,6 +33,22 @@ class UnmaskedHeroController extends NavigatorObserver {
     return heroes;
   }
 
+  /// Locate Hero from within a given context
+  /// returns a [Rect] that will hold the hero's position & size in the context's frame of reference
+  Rect _locateHero({
+    required UnmaskedHeroState hero,
+    required BuildContext context,
+  }) {
+    final heroRenderBox = (hero.context.findRenderObject() as RenderBox);
+    final RenderBox ancestorRenderBox = context.findRenderObject() as RenderBox;
+    assert(heroRenderBox.hasSize && heroRenderBox.size.isFinite);
+
+    return MatrixUtils.transformRect(
+      heroRenderBox.getTransformTo(ancestorRenderBox),
+      Offset.zero & heroRenderBox.size,
+    );
+  }
+
   /// Display Hero on Overlay
   void _displayFlyingHero(UnmaskedHeroState hero) {
     if (navigator == null) {
@@ -65,12 +81,22 @@ class UnmaskedHeroController extends NavigatorObserver {
       Map<String, UnmaskedHeroState> sourceHeroes = _inviteHeroes(fromContext);
       Map<String, UnmaskedHeroState> destinationHeroes =
           _inviteHeroes(toContext);
+
       for (UnmaskedHeroState hero in destinationHeroes.values) {
-        if (sourceHeroes[hero.widget.tag] == null) {
+        final UnmaskedHeroState? sourceHero = sourceHeroes[hero.widget.tag];
+        final UnmaskedHeroState destinationHero = hero;
+        if (sourceHero == null) {
           print(
               'No source Hero could be found for destination Hero with tag: ${hero.widget.tag}');
           continue;
         }
+
+        final Rect fromPosition =
+            _locateHero(hero: sourceHero, context: fromContext);
+        final Rect toPosition =
+            _locateHero(hero: destinationHero, context: toContext);
+        print(fromPosition);
+        print(toPosition);
         _displayFlyingHero(hero);
       }
     });
