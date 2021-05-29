@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:hero_animation_unmasked/packages/unmasked_hero/flying_unmasked_hero.dart';
 import 'package:hero_animation_unmasked/packages/unmasked_hero/unmasked_hero.dart';
 
 class UnmaskedHeroController extends NavigatorObserver {
@@ -49,10 +50,11 @@ class UnmaskedHeroController extends NavigatorObserver {
     );
   }
 
-  /// Display Hero on Overlay at the given position
-  void _displayFlyingHeroAtPosition({
+  /// Display Hero on Overlay and animate them from 1 position to the next
+  void _startFlying({
     required UnmaskedHeroState hero,
-    required Rect position,
+    required Rect fromPosition,
+    required Rect toPosition,
   }) {
     if (navigator == null) {
       print('Cannot fly without my navigator...');
@@ -64,12 +66,10 @@ class UnmaskedHeroController extends NavigatorObserver {
 
     OverlayEntry overlayEntry;
     overlayEntry = OverlayEntry(
-      builder: (BuildContext context) => Positioned(
+      builder: (BuildContext context) => FlyingUnmaskedHero(
+        fromPosition: fromPosition,
+        toPosition: toPosition,
         child: hero.widget.child,
-        top: position.top,
-        left: position.left,
-        width: position.width,
-        height: position.height,
       ),
     );
     Navigator.of(navigatorContext).overlay?.insert(overlayEntry);
@@ -103,7 +103,8 @@ class UnmaskedHeroController extends NavigatorObserver {
         final Rect toPosition =
             _locateHero(hero: destinationHero, context: toContext);
 
-        _displayFlyingHeroAtPosition(hero: hero, position: fromPosition);
+        _startFlying(
+            hero: hero, fromPosition: fromPosition, toPosition: toPosition);
       }
     });
     super.didPush(toRoute, fromRoute);
