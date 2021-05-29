@@ -86,8 +86,10 @@ class UnmaskedHeroController extends NavigatorObserver {
     Navigator.of(navigatorContext).overlay?.insert(overlayEntry);
   }
 
-  @override
-  void didPush(Route<dynamic> toRoute, Route<dynamic>? fromRoute) {
+  void _flyFromTo(
+    Route<dynamic>? fromRoute,
+    Route<dynamic> toRoute,
+  ) {
     WidgetsBinding.instance?.addPostFrameCallback((Duration value) {
       /// If the flight is not valid, let's just ignore the case
       if (!_isFlightValid(fromRoute as PageRoute?, toRoute as PageRoute)) {
@@ -104,8 +106,6 @@ class UnmaskedHeroController extends NavigatorObserver {
         final UnmaskedHeroState? sourceHero = sourceHeroes[hero.widget.tag];
         final UnmaskedHeroState destinationHero = hero;
         if (sourceHero == null) {
-          print(
-              'No source Hero could be found for destination Hero with tag: ${hero.widget.tag}');
           continue;
         }
 
@@ -121,6 +121,20 @@ class UnmaskedHeroController extends NavigatorObserver {
             toPosition: toPosition);
       }
     });
+  }
+
+  @override
+  void didPush(Route<dynamic> toRoute, Route<dynamic>? fromRoute) {
+    _flyFromTo(fromRoute, toRoute);
     super.didPush(toRoute, fromRoute);
+  }
+
+  @override
+  void didPop(Route<dynamic> fromRoute, Route<dynamic>? toRoute) {
+    if (toRoute == null) {
+      return;
+    }
+    _flyFromTo(fromRoute, toRoute);
+    super.didPop(fromRoute, toRoute);
   }
 }
