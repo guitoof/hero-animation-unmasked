@@ -49,8 +49,11 @@ class UnmaskedHeroController extends NavigatorObserver {
     );
   }
 
-  /// Display Hero on Overlay
-  void _displayFlyingHero(UnmaskedHeroState hero) {
+  /// Display Hero on Overlay at the given position
+  void _displayFlyingHeroAtPosition({
+    required UnmaskedHeroState hero,
+    required Rect position,
+  }) {
     if (navigator == null) {
       print('Cannot fly without my navigator...');
       return;
@@ -61,8 +64,12 @@ class UnmaskedHeroController extends NavigatorObserver {
 
     OverlayEntry overlayEntry;
     overlayEntry = OverlayEntry(
-      builder: (BuildContext context) => Container(
+      builder: (BuildContext context) => Positioned(
         child: hero.widget.child,
+        top: position.top,
+        left: position.left,
+        width: position.width,
+        height: position.height,
       ),
     );
     Navigator.of(navigatorContext).overlay?.insert(overlayEntry);
@@ -95,9 +102,8 @@ class UnmaskedHeroController extends NavigatorObserver {
             _locateHero(hero: sourceHero, context: fromContext);
         final Rect toPosition =
             _locateHero(hero: destinationHero, context: toContext);
-        print(fromPosition);
-        print(toPosition);
-        _displayFlyingHero(hero);
+
+        _displayFlyingHeroAtPosition(hero: hero, position: fromPosition);
       }
     });
     super.didPush(toRoute, fromRoute);
