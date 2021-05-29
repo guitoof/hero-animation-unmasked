@@ -33,6 +33,25 @@ class UnmaskedHeroController extends NavigatorObserver {
     return heroes;
   }
 
+  /// Display Hero on Overlay
+  void _displayFlyingHero(UnmaskedHeroState hero) {
+    if (navigator == null) {
+      print('Cannot fly without my navigator...');
+      return;
+    }
+    final BuildContext navigatorContext = navigator!.context;
+    print(
+        "Start flying with Hero with tag = ${hero.widget.tag}, type = ${hero.widget.child.runtimeType}");
+
+    OverlayEntry overlayEntry;
+    overlayEntry = OverlayEntry(
+      builder: (BuildContext context) => Container(
+        child: hero.widget.child,
+      ),
+    );
+    Navigator.of(navigatorContext).overlay?.insert(overlayEntry);
+  }
+
   @override
   void didPush(Route<dynamic> toRoute, Route<dynamic>? fromRoute) {
     WidgetsBinding.instance?.addPostFrameCallback((Duration value) {
@@ -52,8 +71,7 @@ class UnmaskedHeroController extends NavigatorObserver {
               'No source Hero could be found for destination Hero with tag: ${hero.widget.tag}');
           continue;
         }
-        print(
-            "Start flying with Hero with tag = ${hero.widget.tag}, type = ${hero.widget.child.runtimeType}");
+        _displayFlyingHero(hero);
       }
     });
     super.didPush(toRoute, fromRoute);
