@@ -44,15 +44,16 @@ class UnmaskedHeroController extends NavigatorObserver {
       final BuildContext toContext = toRoute.subtreeContext!;
 
       Map<String, UnmaskedHeroState> sourceHeroes = _inviteHeroes(fromContext);
-      for (UnmaskedHeroState hero in sourceHeroes.values) {
-        print(
-            "Source Hero invited: tag = ${hero.widget.tag}, type = ${hero.widget.child.runtimeType}");
-      }
       Map<String, UnmaskedHeroState> destinationHeroes =
           _inviteHeroes(toContext);
       for (UnmaskedHeroState hero in destinationHeroes.values) {
+        if (sourceHeroes[hero.widget.tag] == null) {
+          print(
+              'No source Hero could be found for destination Hero with tag: ${hero.widget.tag}');
+          continue;
+        }
         print(
-            "Destination Hero invited: tag = ${hero.widget.tag}, type = ${hero.widget.child.runtimeType}");
+            "Start flying with Hero with tag = ${hero.widget.tag}, type = ${hero.widget.child.runtimeType}");
       }
     });
     super.didPush(toRoute, fromRoute);
