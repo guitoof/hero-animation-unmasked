@@ -64,13 +64,15 @@ class UnmaskedHeroController extends NavigatorObserver {
     print(
         "Start flying with Hero with tag = ${hero.widget.tag}, type = ${hero.widget.child.runtimeType}");
 
-    OverlayEntry overlayEntry;
+    OverlayEntry? overlayEntry;
     overlayEntry = OverlayEntry(
       builder: (BuildContext context) => FlyingUnmaskedHero(
-        fromPosition: fromPosition,
-        toPosition: toPosition,
-        child: hero.widget.child,
-      ),
+          fromPosition: fromPosition,
+          toPosition: toPosition,
+          child: hero.widget.child,
+          onFlyingEnded: () {
+            overlayEntry?.remove();
+          }),
     );
     Navigator.of(navigatorContext).overlay?.insert(overlayEntry);
   }

@@ -6,11 +6,13 @@ class FlyingUnmaskedHero extends StatefulWidget {
   final Rect fromPosition;
   final Rect toPosition;
   final Widget child;
+  final VoidCallback? onFlyingEnded;
 
   FlyingUnmaskedHero({
     required this.fromPosition,
     required this.toPosition,
     required this.child,
+    this.onFlyingEnded,
   });
 
   @override
@@ -41,6 +43,7 @@ class FlyingUnmaskedHeroState extends State<FlyingUnmaskedHero> {
       left: flying ? toPosition.left : fromPosition.left,
       height: flying ? toPosition.height : fromPosition.height,
       width: flying ? toPosition.width : fromPosition.width,
+      onEnd: widget.onFlyingEnded,
     );
   }
 }
