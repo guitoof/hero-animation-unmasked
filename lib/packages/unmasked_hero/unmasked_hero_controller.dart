@@ -52,7 +52,8 @@ class UnmaskedHeroController extends NavigatorObserver {
 
   /// Display Hero on Overlay and animate them from 1 position to the next
   void _startFlying({
-    required UnmaskedHeroState hero,
+    required UnmaskedHeroState sourceHero,
+    required UnmaskedHeroState destinationHero,
     required Rect fromPosition,
     required Rect toPosition,
   }) {
@@ -61,8 +62,13 @@ class UnmaskedHeroController extends NavigatorObserver {
       return;
     }
     final BuildContext navigatorContext = navigator!.context;
+    final UnmaskedHeroState hero = destinationHero;
     print(
         "Start flying with Hero with tag = ${hero.widget.tag}, type = ${hero.widget.child.runtimeType}");
+
+    /// Hide source & destination heroes during flight animation
+    sourceHero.hide();
+    destinationHero.hide();
 
     OverlayEntry? overlayEntry;
     overlayEntry = OverlayEntry(
@@ -71,6 +77,9 @@ class UnmaskedHeroController extends NavigatorObserver {
           toPosition: toPosition,
           child: hero.widget.child,
           onFlyingEnded: () {
+            /// Show source & destination heroes at the end of flight animation
+            sourceHero.show();
+            destinationHero.show();
             overlayEntry?.remove();
           }),
     );
@@ -106,7 +115,10 @@ class UnmaskedHeroController extends NavigatorObserver {
             _locateHero(hero: destinationHero, context: toContext);
 
         _startFlying(
-            hero: hero, fromPosition: fromPosition, toPosition: toPosition);
+            sourceHero: sourceHero,
+            destinationHero: destinationHero,
+            fromPosition: fromPosition,
+            toPosition: toPosition);
       }
     });
     super.didPush(toRoute, fromRoute);

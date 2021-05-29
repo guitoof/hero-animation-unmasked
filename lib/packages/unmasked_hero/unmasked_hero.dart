@@ -11,8 +11,22 @@ class UnmaskedHero extends StatefulWidget {
 }
 
 class UnmaskedHeroState extends State<UnmaskedHero> {
+  bool hidden = false;
+
+  void hide() {
+    setState(() {
+      hidden = true;
+    });
+  }
+
+  void show() {
+    setState(() {
+      hidden = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return widget.child;
+    return Opacity(opacity: hidden ? 0.0 : 1.0, child: widget.child);
   }
 }
