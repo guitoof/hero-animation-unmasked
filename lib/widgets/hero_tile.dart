@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hero_animation_unmasked/entities/hero_entity.dart';
+import 'package:hero_animation_unmasked/packages/unmasked_hero/unmasked_hero.dart';
 
 class HeroTile extends StatelessWidget {
   final HeroEntity hero;
@@ -20,8 +21,11 @@ class HeroTile extends StatelessWidget {
         children: <Widget>[
           Expanded(
             flex: 2,
-            child: Image.network(
-              hero.avatar,
+            child: UnmaskedHero(
+              tag: hero.id,
+              child: Image.network(
+                hero.avatar,
+              ),
             ),
           ),
           Expanded(

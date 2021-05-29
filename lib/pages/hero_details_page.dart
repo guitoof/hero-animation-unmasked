@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hero_animation_unmasked/entities/hero_entity.dart';
+import 'package:hero_animation_unmasked/packages/unmasked_hero/unmasked_hero.dart';
 
 class HeroDetailsPage extends StatelessWidget {
   @override
@@ -15,8 +16,11 @@ class HeroDetailsPage extends StatelessWidget {
         alignment: Alignment.topCenter,
         child: Column(
           children: [
-            Image.network(
-              hero.avatar,
+            UnmaskedHero(
+              tag: hero.id,
+              child: Image.network(
+                hero.avatar,
+              ),
             ),
             Text(
               hero.name,
