@@ -90,7 +90,7 @@ class UnmaskedHeroController extends NavigatorObserver {
     Route<dynamic>? fromRoute,
     Route<dynamic> toRoute,
   ) {
-    WidgetsBinding.instance?.addPostFrameCallback((Duration value) {
+    WidgetsBinding.instance.addPostFrameCallback((Duration value) {
       /// If the flight is not valid, let's just ignore the case
       if (!_isFlightValid(fromRoute as PageRoute?, toRoute as PageRoute)) {
         return;
